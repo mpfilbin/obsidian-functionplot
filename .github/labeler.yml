@@ -1,16 +1,23 @@
 docs:
-  - "README.md"
-  - "images/**/*"
+  - changed-files:
+      - any-glob-to-any-file:
+          - "README.md"
+          - "images/**/*"
 
 code:
-  - "src/**/*.ts"
+  - changed-files:
+      - any-glob-to-any-file: "src/**/*.ts"
 
 style:
-  - "src/styles.scss"
+  - changed-files:
+      - any-glob-to-any-file: "src/styles.scss"
 
 automation:
-  - ".github/workflows/*"
+  - changed-files:
+      - any-glob-to-any-file: ".github/workflows/*"
 
 invalid:
-  - "LICENSE"
-  - "versions.json"
+  - changed-files:
+      - any-glob-to-any-file:
+          - "LICENSE"
+          - "versions.json"

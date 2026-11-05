@@ -1,4 +1,4 @@
-import { Editor, parseYaml } from "obsidian";
+import { Editor } from "obsidian";
 import type ObsidianFunctionPlot from "../main";
 import { PlotOptions, Line } from "./types";
 import { type FunctionPlotOptions } from "function-plot/dist/types";
@@ -119,20 +119,3 @@ export async function renderPlotAsImage(
   insertParagraphAtCursor(plugin, editor, text);
 }
 */
-
-export function parseCodeBlock(content: string): [object, string[]] {
-  let header = {},
-    offset = 0;
-  if (/-{3}[^]*-{3}/.test(content)) {
-    // header present
-    const headerMatch = content.match(/-{3}([^]*?)-{3}/)[1];
-    offset = headerMatch.length + 6;
-    header = parseYaml(headerMatch);
-  }
-  const functions = content
-    .slice(offset)
-    .split("\n")
-    .map((line) => line.trim())
-    .filter((line) => line.length > 0);
-  return [header, functions];
-}
