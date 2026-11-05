@@ -1,48 +1,52 @@
-name: release
+name: Release
 
 on:
-  release:
-    types: [published]
-
-permissions:
-  contents: write
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - manifest.json
 
 jobs:
   release:
+    name: Build and release
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-        with:
-          ref: master
+      - uses: actions/checkout@v7
 
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v7
+      - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
           cache: npm
 
-      - name: Install packages
-        run: npm ci
+      - run: npm ci
 
-      - name: Run version-bump
-        run: node .github/version-bump.mjs ${{ github.event.release.tag_name }}
+      - name: Read version from manifest
+        id: version
+        run: echo "version=$(node -p "require('./manifest.json').version")" >> "$GITHUB_OUTPUT"
 
-      - name: Commit and push changes
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          git add -A
-          git commit -m "chore(versions): index minAppVersion for latest release"
-          git push origin master
-
-      - name: Build
+      - name: Build plugin
         run: npm run build
 
-      - name: Upload assets to a Release
-        uses: AButler/upload-release-assets@v2.0
-        with:
-          repo-token: ${{ github.token }}
-          files: "main.js;manifest.json"
+      - name: Generate checksums
+        run: |
+          FILES="main.js manifest.json"
+          [ -f styles.css ] && FILES="$FILES styles.css"
+          sha256sum $FILES > SHA256SUMS.txt
+          echo "ASSETS=$FILES SHA256SUMS.txt" >> "$GITHUB_ENV"
+
+      - name: Create GitHub release
+        run: |
+          if gh release view "$VERSION" > /dev/null 2>&1; then
+            echo "Release $VERSION already exists, skipping."
+          else
+            gh release create "$VERSION" $ASSETS \
+              --title "$VERSION" \
+              --generate-notes
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.version.outputs.version }}

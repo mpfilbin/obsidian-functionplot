@@ -14,7 +14,9 @@
     "build": "webpack",
     "test": "jest",
     "format": "prettier --write .",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "typecheck": "tsc --noEmit",
+    "release": "bash scripts/release.sh"
   },
   "devDependencies": {
     "@codemirror/state": "^6.0.0",

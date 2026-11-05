@@ -15,3 +15,19 @@ The `minAppVersion` field in `manifest.json` is the lowest Obsidian version the 
 ## Tooling
 
 This project uses npm (not yarn or pnpm) and the current Node LTS release (see `.nvmrc`). Node is only needed to build and test the plugin; the plugin itself runs inside Obsidian.
+
+## CI
+
+Pull requests run four parallel checks (`.github/workflows/ci.yml`): typecheck, lint, test and build. You can run the same checks locally with `npm run typecheck`, `npm run lint`, `npm test` and `npm run build`.
+
+## Releasing
+
+Never edit version numbers by hand. Run one of:
+
+```bash
+npm run release patch   # 1.2.1 -> 1.2.2
+npm run release minor   # 1.2.1 -> 1.3.0
+npm run release major   # 1.2.1 -> 2.0.0
+```
+
+This updates `package.json`, `package-lock.json`, `manifest.json` (and `versions.json` when `minAppVersion` is new) and commits. Pushing a `manifest.json` change to the default branch runs the Release workflow (`.github/workflows/release.yml`), which builds the plugin and publishes a GitHub release with `main.js`, `manifest.json` and `SHA256SUMS.txt`. A release that already exists is skipped.
