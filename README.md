@@ -2,7 +2,7 @@
 
 A plugin for displaying mathematical graphs in obsidian.md.
 
-> ⭐ _Remember to star this plugin on [Github](https://github.com/mpfilbin/obsidian-functionplot) if you like it!_
+> ⭐ _Remember to star this plugin on [GitHub](https://github.com/mpfilbin/obsidian-functionplot) if you like it!_
 
 _This file only contains basic instructions to get you to using this plugin quickly. If you want a more detailed documentation, take a look at the [wiki](https://github.com/leonhma/obsidian-functionplot/wiki)._
 

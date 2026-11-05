@@ -1,7 +1,10 @@
 import { readFileSync } from "fs";
 
-/** Parse "major.minor.patch" into a comparable tuple. */
+/** Parse "major.minor.patch" into a comparable tuple, throwing on anything else. */
 function parseVersion(version: string): [number, number, number] {
+  if (!/^\d+\.\d+\.\d+$/.test(version)) {
+    throw new Error(`Invalid version "${version}", expected "x.y.z"`);
+  }
   const [major, minor, patch] = version.split(".").map(Number);
   return [major, minor, patch];
 }
