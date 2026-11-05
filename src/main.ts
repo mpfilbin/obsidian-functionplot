@@ -9,7 +9,7 @@ import {
 } from "./common/defaults";
 
 export default class ObsidianFunctionPlot extends Plugin {
-  settings: PluginSettings;
+  declare settings: PluginSettings;
 
   async onload(): Promise<void> {
     // load settings

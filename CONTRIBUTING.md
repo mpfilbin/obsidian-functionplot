@@ -4,10 +4,14 @@ Contibutions are always welcome! We appreciate every help with this project, be 
 
 TL;DR:
 
--   The `minAppVersion` should be kept up-to-date
+-   Use the Node version in `.nvmrc` and install with `npm ci`
+-   `package-lock.json` is committed; use `npm install <pkg>` to change dependencies
+-   The `obsidian` typings must not be newer than `minAppVersion`
 
 ## Rules
 
-Because obsidian keeps an index of versions of the plugin and their respective minimum version requirements for obsidian itself, the `minAppVersion` field in `manifest.json` and the version of the dependency `obsidian` in `package.json` should be kept equal. The version should also reflect the lowest version of api under which the plugin will work. The dependency version in `package.json` is pinned to a single version.
+The `minAppVersion` field in `manifest.json` is the lowest Obsidian version the plugin is expected to work with. The version of the `obsidian` typings package in `package.json` is pinned to a single version and must not be newer than `minAppVersion`, so the plugin never calls APIs that don't exist in the declared minimum version (`npm test` enforces this). If no typings release exists for your exact `minAppVersion`, use the newest one that is not newer than it.
 
-Oh, and also: This project uses yarn, although it doesn't matter if you use another package manager so long as you don't commit the log and lock files to VCS. Just be sure to let us know of your choice of package manager if you encounter a problem.
+## Tooling
+
+This project uses npm (not yarn or pnpm) and the current Node LTS release (see `.nvmrc`). Node is only needed to build and test the plugin; the plugin itself runs inside Obsidian.

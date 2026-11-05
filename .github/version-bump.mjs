@@ -1,11 +1,15 @@
-import { readFileSync, writeFileSync } from "fs";
+import { existsSync, readFileSync, writeFileSync } from "fs";
 
 const version = process.argv[2];
 
+const readJson = (path) => JSON.parse(readFileSync(path, "utf8"));
+const writeJson = (path, data) =>
+  writeFileSync(path, JSON.stringify(data, null, 2) + "\n");
+
 // read files
-let package_ = JSON.parse(readFileSync("package.json", "utf8"));
-let manifest = JSON.parse(readFileSync("manifest.json", "utf8"));
-let versions = JSON.parse(readFileSync("versions.json", "utf8"));
+const package_ = readJson("package.json");
+const manifest = readJson("manifest.json");
+const versions = readJson("versions.json");
 
 const minAppVersion = manifest.minAppVersion;
 
@@ -16,6 +20,14 @@ versions[version] = minAppVersion;
 package_.version = version;
 manifest.version = version;
 
-writeFileSync("package.json", JSON.stringify(package_, null, "\t"));
-writeFileSync("manifest.json", JSON.stringify(manifest, null, "\t"));
-writeFileSync("versions.json", JSON.stringify(versions, null, "\t"));
+writeJson("package.json", package_);
+writeJson("manifest.json", manifest);
+writeJson("versions.json", versions);
+
+// keep package-lock.json's own version in sync
+if (existsSync("package-lock.json")) {
+  const lock = readJson("package-lock.json");
+  lock.version = version;
+  if (lock.packages?.[""]) lock.packages[""].version = version;
+  writeJson("package-lock.json", lock);
+}

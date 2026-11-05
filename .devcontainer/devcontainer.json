@@ -1,4 +1,10 @@
 {
   "name": "obsidian-functionplot",
-  "onCreateCommand": "yarn install --non-interactive"
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "26"
+    }
+  },
+  "onCreateCommand": "npm ci"
 }
