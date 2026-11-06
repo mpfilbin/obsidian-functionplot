@@ -1,3 +1,4 @@
+import { describe, expect, test } from "vitest";
 import { parseCodeBlock } from "../common/parse";
 
 describe("parseCodeBlock", () => {

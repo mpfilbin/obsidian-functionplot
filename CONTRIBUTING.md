@@ -14,7 +14,12 @@ The `minAppVersion` field in `manifest.json` is the lowest Obsidian version the 
 
 ## Tooling
 
-This project uses npm (not yarn or pnpm) and the current Node LTS release (see `.nvmrc`). Node is only needed to build and test the plugin; the plugin itself runs inside Obsidian.
+This project uses npm (not yarn or pnpm) and the current Node LTS release. Node is only needed to build and test the plugin; the plugin itself runs inside Obsidian. Tests run with [Vitest](https://vitest.dev) (`npm test`, or `npm run test:watch`).
+
+The Node version is pinned in two places, and a test keeps their major versions in sync:
+
+-   `.tool-versions` for [asdf](https://asdf-vm.com) on macOS and Linux (`asdf plugin add nodejs && asdf install`). This pins an exact version, so bump it by hand when a new Node release comes out.
+-   `.nvmrc` for CI and for Windows development (nvm, fnm, etc.). CI follows the latest release of that major version.
 
 ## CI
 

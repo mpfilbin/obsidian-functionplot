@@ -1,3 +1,4 @@
+import { expect, test } from "vitest";
 import { readFileSync } from "fs";
 
 /** Parse "major.minor.patch" into a comparable tuple, throwing on anything else. */
@@ -26,4 +27,15 @@ test("obsidian typings are not newer than minAppVersion", () => {
   const typings: string = package_.dependencies.obsidian;
   expect(typings).toMatch(/^\d+\.\d+\.\d+$/); // pinned, no ranges
   expect(isNewer(typings, manifest.minAppVersion)).toBe(false);
+});
+
+test(".tool-versions (asdf) and .nvmrc pin the same Node major version", () => {
+  // .nvmrc drives CI and Windows development, .tool-versions drives asdf on
+  // macOS/Linux. They must not drift apart.
+  const nvmrc = readFileSync(".nvmrc", "utf8").trim();
+  const toolVersions = readFileSync(".tool-versions", "utf8");
+  const match = toolVersions.match(/^nodejs\s+(\d+)\.\d+\.\d+\s*$/m);
+  expect(nvmrc).toMatch(/^\d+$/);
+  expect(match).not.toBeNull();
+  expect(match?.[1]).toBe(nvmrc);
 });
