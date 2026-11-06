@@ -21,6 +21,19 @@ The Node version is pinned in two places, and a test keeps their major versions 
 -   `.tool-versions` for [asdf](https://asdf-vm.com) on macOS and Linux (`asdf plugin add nodejs && asdf install`). This pins an exact version, so bump it by hand when a new Node release comes out.
 -   `.nvmrc` for CI and for Windows development (nvm, fnm, etc.). CI follows the latest release of that major version.
 
+## Trying the plugin in a vault
+
+Build the plugin and copy it into a vault's `.obsidian/plugins/` folder for testing:
+
+```bash
+./scripts/install.sh /path/to/your/vault     # builds, then copies main.js and manifest.json (and styles.css if present)
+./scripts/uninstall.sh /path/to/your/vault   # removes the plugin folder and its community-plugins.json entry
+```
+
+On Windows, use PowerShell: `.\scripts\install.ps1 C:\path\to\vault` and `.\scripts\uninstall.ps1 C:\path\to\vault`.
+
+The plugin folder name comes from `id` in `manifest.json`, so it always matches the plugin. After installing, reload Obsidian and enable the plugin under Settings → Community plugins. Use a throwaway vault: uninstalling deletes the plugin folder including its saved settings (`data.json`).
+
 ## CI
 
 Pull requests run four parallel checks (`.github/workflows/ci.yml`): typecheck, lint, test and build. You can run the same checks locally with `npm run typecheck`, `npm run lint`, `npm test` and `npm run build`.
