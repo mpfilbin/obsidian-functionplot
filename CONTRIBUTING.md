@@ -4,9 +4,9 @@ Contibutions are always welcome! We appreciate every help with this project, be 
 
 TL;DR:
 
--   Use the Node version in `.nvmrc` and install with `npm ci`
--   `package-lock.json` is committed; use `npm install <pkg>` to change dependencies
--   The `obsidian` typings must not be newer than `minAppVersion`
+- Use the Node version in `.nvmrc` and install with `npm ci`
+- `package-lock.json` is committed; use `npm install <pkg>` to change dependencies
+- The `obsidian` typings must not be newer than `minAppVersion`
 
 ## Rules
 
@@ -18,8 +18,8 @@ This project uses npm (not yarn or pnpm) and the current Node LTS release. Node 
 
 The Node version is pinned in two places, and a test keeps their major versions in sync:
 
--   `.tool-versions` for [asdf](https://asdf-vm.com) on macOS and Linux (`asdf plugin add nodejs && asdf install`). This pins an exact version, so bump it by hand when a new Node release comes out.
--   `.nvmrc` for CI and for Windows development (nvm, fnm, etc.). CI follows the latest release of that major version.
+- `.tool-versions` for [asdf](https://asdf-vm.com) on macOS and Linux (`asdf plugin add nodejs && asdf install`). This pins an exact version, so bump it by hand when a new Node release comes out.
+- `.nvmrc` for CI and for Windows development (nvm, fnm, etc.). CI follows the latest release of that major version.
 
 ## Trying the plugin in a vault
 
