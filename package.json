@@ -1,6 +1,6 @@
 {
   "name": "obsidian-functionplot",
-  "version": "1.2.1",
+  "version": "1.2.3",
   "description": "A plugin for displaying mathematical functions in obsidian.md.",
   "repository": "https://github.com/mpfilbin/obsidian-functionplot",
   "type": "module",
@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@codemirror/state": "^6.0.0",
-    "@codemirror/view": "^6.0.0",
+    "@codemirror/view": "^6.43.15",
     "@types/node": "^26.0.0",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
@@ -29,7 +29,7 @@
     "eslint-config-prettier": "^10.1.8",
     "prettier": "^2.7.1",
     "sass": "^1.54.4",
-    "sass-loader": "^13.0.2",
+    "sass-loader": "^17.1.0",
     "ts-loader": "^9.3.1",
     "typescript": "^6.0.0",
     "vitest": "^5.1.0",
@@ -40,5 +40,11 @@
   "dependencies": {
     "function-plot": "^1.23.1",
     "obsidian": "1.14.4"
+  },
+  "overrides": {
+    "obsidian": {
+      "@codemirror/state": "$@codemirror/state",
+      "@codemirror/view": "$@codemirror/view"
+    }
   }
 }
