@@ -4,6 +4,10 @@ on:
   pull_request:
     branches: ["**"]
 
+# Least privilege: these jobs only read the repository.
+permissions:
+  contents: read
+
 jobs:
   typecheck:
     name: Typecheck
