@@ -114,4 +114,4 @@ Contributions are always welcome! Be it submitting issues, editing the wiki or c
 
 This plugin is based on / uses:
 
--   [function-plot](https://github.com/mauriciopoppe/function-plot): MIT License, Copyright (c) 2015 Mauricio Poppe
+- [function-plot](https://github.com/mauriciopoppe/function-plot): MIT License, Copyright (c) 2015 Mauricio Poppe
