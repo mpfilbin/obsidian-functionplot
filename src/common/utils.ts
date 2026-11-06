@@ -65,6 +65,8 @@ export async function createPlot(
       title: options.title,
       grid: options.grid,
       disableZoom: options.disableZoom,
+      width: options.width,
+      height: options.height,
       xAxis: {
         domain: options.bounds.slice(0, 2),
         label: options.xLabel,
