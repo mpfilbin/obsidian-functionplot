@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync } from "fs";
 
 // Copies the version from package.json into manifest.json, and records the
-// version -> minAppVersion mapping in versions.json when minAppVersion is new.
+// version -> minAppVersion mapping for it in versions.json.
 // Run via scripts/release.sh (`npm run release <major|minor|patch>`).
 const readJson = (path) => JSON.parse(readFileSync(path, "utf8"));
 const writeJson = (path, data) =>
@@ -14,8 +14,9 @@ const { minAppVersion } = manifest;
 manifest.version = targetVersion;
 writeJson("manifest.json", manifest);
 
+// Every released version gets an entry (as in Obsidian's sample plugin).
 const versions = readJson("versions.json");
-if (!Object.values(versions).includes(minAppVersion)) {
+if (!(targetVersion in versions)) {
   versions[targetVersion] = minAppVersion;
   writeJson("versions.json", versions);
 }

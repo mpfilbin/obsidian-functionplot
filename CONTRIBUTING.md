@@ -48,4 +48,4 @@ npm run release minor   # 1.2.1 -> 1.3.0
 npm run release major   # 1.2.1 -> 2.0.0
 ```
 
-This updates `package.json`, `package-lock.json`, `manifest.json` (and `versions.json` when `minAppVersion` is new) and commits. Pushing a `manifest.json` change to the default branch runs the Release workflow (`.github/workflows/release.yml`), which builds the plugin and publishes a GitHub release with `main.js`, `manifest.json` and `SHA256SUMS.txt`. A release that already exists is skipped.
+This updates `package.json`, `package-lock.json`, `manifest.json` and `versions.json` (which gets an entry for every release, mapping it to `minAppVersion`) and commits. Pushing a `manifest.json` change to the default branch runs the Release workflow (`.github/workflows/release.yml`), which builds the plugin and publishes a GitHub release with `main.js`, `manifest.json` and `SHA256SUMS.txt`. A release that already exists is skipped.

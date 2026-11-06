@@ -11,11 +11,9 @@ fi
 # Bump package.json.
 npm version "$BUMP" --no-git-tag-version
 
-# Update manifest.json and versions.json to match.
+# Update manifest.json and versions.json to match. (`npm version` above has
+# already updated package-lock.json, so no `npm install` is needed.)
 node version-bump.mjs
-
-# Sync package-lock.json with the new version.
-npm install
 
 NEW_VERSION=$(node -p "require('./package.json').version")
 
