@@ -40,5 +40,11 @@
   "dependencies": {
     "function-plot": "^1.23.1",
     "obsidian": "1.14.4"
+  },
+  "overrides": {
+    "obsidian": {
+      "@codemirror/state": "$@codemirror/state",
+      "@codemirror/view": "$@codemirror/view"
+    }
   }
 }
