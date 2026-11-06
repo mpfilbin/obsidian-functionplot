@@ -51,13 +51,37 @@ title: The random graph
 xLabel: Time
 yLabel: Cost
 bounds: [0, 10, 0, 50]
-disbaleZoom: 1
+disableZoom: false
 grid: true
 ---
 g(x)=x^PI
 f(x)=E+log(x)*2
 ```
 ````
+
+### Function lines and options
+
+Each line below the header describes one curve. Any of these forms work:
+
+| Line         | Meaning                             |
+| ------------ | ----------------------------------- |
+| `f(x) = x^2` | a definition (the name is ignored)  |
+| `x^2`        | a bare expression                   |
+| `fn = x^2`   | the same, with an explicit `fn` key |
+
+Add options to a curve by appending them after `@`, as `key=value`:
+
+````
+```functionplot
+---
+bounds: [-1, 6, -1, 30]
+---
+f(x) = x^2 @ range=[0, 5] @ color=crimson
+fn = 3*x @ graphType=scatter
+```
+````
+
+Supported options: `range` (a list such as `[0, 5]`), `graphType` (`polyline`, the default, `interval` or `scatter`), `nSamples`, `closed` and `color`.
 
 ## 🧮 Supported Math
 

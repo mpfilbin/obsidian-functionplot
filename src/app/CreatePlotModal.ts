@@ -2,7 +2,8 @@ import { Chart } from "function-plot";
 import { FunctionPlotDatum } from "function-plot/dist/types";
 import { Editor, Modal, Setting } from "obsidian";
 import { DEFAULT_PLOT_OPTIONS } from "../common/defaults";
-import { PlotOptions, rendererType, Line } from "../common/types";
+import { PlotOptions, rendererType } from "../common/types";
+import { parseFunctionLines } from "../common/line";
 import type ObsidianFunctionPlot from "../main";
 import { createPlot, renderPlotAsInteractive } from "../common/utils";
 
@@ -33,22 +34,11 @@ export default class CreatePlotModal extends Modal {
     this.plot.options.xAxis.domain = this.options.bounds.slice(0, 2);
     this.plot.options.yAxis.domain = this.options.bounds.slice(2, 4);
     this.plot.options.grid = this.options.grid;
-    this.plot.options.data = this.options.functions.map(
-      (line): FunctionPlotDatum => {
-        // use polyline by default
-        const lineProperties: Line = {graphType: "polyline"};
-
-        line.split("@").forEach((property) => {
-          const tup = property.split("=");
-          const value = tup[1].trim()
-          lineProperties[tup[0].trim()] = value.startsWith("[") ? JSON.parse(value) : value;
-        });
-
-        return lineProperties;
-      }
-    );
-    // redirect errors within function-plot to debug
+    // redirect errors (including half-typed function lines) to debug
     try {
+      this.plot.options.data = parseFunctionLines(
+        this.options.functions
+      ) as FunctionPlotDatum[];
       this.plot.build();
     } catch (e) {
       console.debug(e);
