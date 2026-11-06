@@ -1,6 +1,6 @@
 {
   "name": "obsidian-functionplot",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "A plugin for displaying mathematical functions in obsidian.md.",
   "repository": "https://github.com/mpfilbin/obsidian-functionplot",
   "type": "module",
