@@ -2,7 +2,7 @@
 
 A plugin for displaying mathematical graphs in obsidian.md.
 
-> ⭐ _Remember to star this plugin on [Github](https://github.com/leonhma/obsidian-functionplot) if you like it!_
+> ⭐ _Remember to star this plugin on [GitHub](https://github.com/mpfilbin/obsidian-functionplot) if you like it!_
 
 _This file only contains basic instructions to get you to using this plugin quickly. If you want a more detailed documentation, take a look at the [wiki](https://github.com/leonhma/obsidian-functionplot/wiki)._
 
@@ -51,13 +51,37 @@ title: The random graph
 xLabel: Time
 yLabel: Cost
 bounds: [0, 10, 0, 50]
-disbaleZoom: 1
+disableZoom: false
 grid: true
 ---
 g(x)=x^PI
 f(x)=E+log(x)*2
 ```
 ````
+
+### Function lines and options
+
+Each line below the header describes one curve. Any of these forms work:
+
+| Line         | Meaning                             |
+| ------------ | ----------------------------------- |
+| `f(x) = x^2` | a definition (the name is ignored)  |
+| `x^2`        | a bare expression                   |
+| `fn = x^2`   | the same, with an explicit `fn` key |
+
+Add options to a curve by appending them after `@`, as `key=value`:
+
+````
+```functionplot
+---
+bounds: [-1, 6, -1, 30]
+---
+f(x) = x^2 @ range=[0, 5] @ color=crimson
+fn = 3*x @ graphType=scatter
+```
+````
+
+Supported options: `range` (a list such as `[0, 5]`), `graphType` (`polyline`, the default, `interval` or `scatter`), `nSamples`, `closed` and `color`.
 
 ## 🧮 Supported Math
 
@@ -80,7 +104,7 @@ If you have any questions about the usage of the plugin, take a look at the [wik
 
 ## 🐞 Bugs and Errors
 
-If you encounter any errors while using this plugin, please report them to us. To do so, click [this link](https://github.com/leonhma/obsidian-functionplot/issues/new?assignees=leonhma&labels=bug&template=BUG_REPORT.yml), fill out the form as best as you can and click `Submit new issue`. These issues are publically viewable, so please don't submit any personal information.
+If you encounter any errors while using this plugin, please report them to us. To do so, click [this link](https://github.com/mpfilbin/obsidian-functionplot/issues/new?assignees=mpfilbin&labels=bug&template=BUG_REPORT.yml), fill out the form as best as you can and click `Submit new issue`. These issues are publically viewable, so please don't submit any personal information.
 
 ## 🤝 Contributing
 

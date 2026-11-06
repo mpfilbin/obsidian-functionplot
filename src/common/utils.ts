@@ -1,6 +1,7 @@
-import { Editor, parseYaml } from "obsidian";
+import { Editor } from "obsidian";
 import type ObsidianFunctionPlot from "../main";
-import { PlotOptions, Line } from "./types";
+import { PlotOptions } from "./types";
+import { parseFunctionLines } from "./line";
 import { type FunctionPlotOptions } from "function-plot/dist/types";
 import createStylingPlugin from "../plugins/styling";
 import functionPlot, { Chart } from "function-plot";
@@ -64,6 +65,8 @@ export async function createPlot(
       title: options.title,
       grid: options.grid,
       disableZoom: options.disableZoom,
+      width: options.width,
+      height: options.height,
       xAxis: {
         domain: options.bounds.slice(0, 2),
         label: options.xLabel,
@@ -72,19 +75,7 @@ export async function createPlot(
         domain: options.bounds.slice(2, 4),
         label: options.yLabel,
       },
-      data: options.functions.map((line) => {
-        // use polyline by default
-        const lineProperties: Line = {graphType: "polyline"};
-
-        line.split("@").forEach((property) => {
-          const tup = property.split("=");
-          const value = tup[1].trim()
-          // Using JSON.parse here to convert "range" value from string to real array
-          lineProperties[tup[0].trim()] = value.startsWith("[") ? JSON.parse(value) : value;
-        });
-
-        return lineProperties;
-      }),
+      data: parseFunctionLines(options.functions),
     };
     const plot = functionPlot(fPlotOptions);
 
@@ -119,20 +110,3 @@ export async function renderPlotAsImage(
   insertParagraphAtCursor(plugin, editor, text);
 }
 */
-
-export function parseCodeBlock(content: string): [object, string[]] {
-  let header = {},
-    offset = 0;
-  if (/-{3}[^]*-{3}/.test(content)) {
-    // header present
-    const headerMatch = content.match(/-{3}([^]*?)-{3}/)[1];
-    offset = headerMatch.length + 6;
-    header = parseYaml(headerMatch);
-  }
-  const functions = content
-    .slice(offset)
-    .split("\n")
-    .map((line) => line.trim())
-    .filter((line) => line.length > 0);
-  return [header, functions];
-}

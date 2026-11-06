@@ -1,0 +1,68 @@
+/*
+ * "Plot a function" modal.
+ *
+ * Obsidian gives modals a fixed width, which is too narrow for the settings
+ * column plus a live preview. Size it relative to the window instead (not on
+ * mobile, where Obsidian already uses the full width).
+ */
+body:not(.is-mobile) .modal.obsfplt-modal {
+  width: 80vw;
+  max-width: 80vw;
+}
+
+.obsfplt-modal-body {
+  display: flex;
+  align-items: center;
+  gap: 1.5em;
+}
+
+.obsfplt-modal-settings {
+  flex: 0 1 24rem;
+  min-width: 0;
+}
+
+/* The plot is sized to this column's width by the plugin, so the column must
+   take its width from the layout, not from the plot inside it. */
+.obsfplt-modal-preview {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 1em;
+}
+
+.obsfplt-modal-preview p {
+  margin: 0.5em 0 0;
+  font-size: 0.8em;
+  color: var(--text-faint);
+  text-align: center;
+}
+
+/* Narrow windows and mobile: stack the settings above the preview. The modal
+   is 80vw wide, so below ~1100px a side-by-side plot would be too small. */
+@media (max-width: 1100px) {
+  .obsfplt-modal-body {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .obsfplt-modal-settings {
+    flex-basis: auto;
+  }
+
+  /* Show the preview first so it is visible without scrolling. */
+  .obsfplt-modal-preview {
+    order: -1;
+  }
+}
+
+body.is-mobile .obsfplt-modal-body {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+body.is-mobile .obsfplt-modal-settings {
+  flex-basis: auto;
+}
+
+body.is-mobile .obsfplt-modal-preview {
+  order: -1;
+}

@@ -2,7 +2,13 @@ import { Chart } from "function-plot";
 import { FunctionPlotDatum } from "function-plot/dist/types";
 import { Editor, Modal, Setting } from "obsidian";
 import { DEFAULT_PLOT_OPTIONS } from "../common/defaults";
-import { PlotOptions, rendererType, Line } from "../common/types";
+import { PlotOptions, rendererType } from "../common/types";
+import { parseFunctionLines } from "../common/line";
+import {
+  measurePreviewSize,
+  observePreviewSize,
+  PlotSize,
+} from "../common/layout";
 import type ObsidianFunctionPlot from "../main";
 import { createPlot, renderPlotAsInteractive } from "../common/utils";
 
@@ -12,6 +18,8 @@ export default class CreatePlotModal extends Modal {
   editor: Editor;
   plot: Chart;
   renderer: rendererType;
+  /** Stops watching for resizes; set while the modal is open. */
+  stopObservingSize?: () => void;
 
   constructor(plugin: ObsidianFunctionPlot, editor: Editor) {
     super(plugin.app);
@@ -33,21 +41,25 @@ export default class CreatePlotModal extends Modal {
     this.plot.options.xAxis.domain = this.options.bounds.slice(0, 2);
     this.plot.options.yAxis.domain = this.options.bounds.slice(2, 4);
     this.plot.options.grid = this.options.grid;
-    this.plot.options.data = this.options.functions.map(
-      (line): FunctionPlotDatum => {
-        // use polyline by default
-        const lineProperties: Line = {graphType: "polyline"};
+    // redirect errors (including half-typed function lines) to debug
+    try {
+      this.plot.options.data = parseFunctionLines(
+        this.options.functions
+      ) as FunctionPlotDatum[];
+      this.plot.build();
+    } catch (e) {
+      console.debug(e);
+    }
+  }
 
-        line.split("@").forEach((property) => {
-          const tup = property.split("=");
-          const value = tup[1].trim()
-          lineProperties[tup[0].trim()] = value.startsWith("[") ? JSON.parse(value) : value;
-        });
-
-        return lineProperties;
-      }
-    );
-    // redirect errors within function-plot to debug
+  /**
+   * Resize the preview to fit the modal.
+   * @param size The new plot size
+   */
+  resizePreview(size: PlotSize) {
+    if (!this.plot) return;
+    this.plot.options.width = size.width;
+    this.plot.options.height = size.height;
     try {
       this.plot.build();
     } catch (e) {
@@ -58,28 +70,33 @@ export default class CreatePlotModal extends Modal {
   async onOpen() {
     this.options = Object.assign({}, DEFAULT_PLOT_OPTIONS);
 
+    // The modal's size is relative to the window; see styles.css.
+    this.modalEl.addClass("obsfplt-modal");
+
     const { contentEl } = this;
     contentEl.empty();
 
     // Header
     contentEl.createEl("h1", { text: "Plot a function" });
 
-    const flex = contentEl.createDiv({
-      attr: { style: "display: flex; align-items: center" },
-    });
+    const body = contentEl.createDiv({ cls: "obsfplt-modal-body" });
 
-    const settings = flex.createDiv();
-    const preview = flex.createDiv({ attr: { style: "padding: 1em" } });
+    const settings = body.createDiv({ cls: "obsfplt-modal-settings" });
+    const preview = body.createDiv({ cls: "obsfplt-modal-preview" });
+    // Size the plot to the space the layout gives it, and keep it that size
+    // as the window is resized.
+    const plotTarget = preview.createDiv();
+    const size = measurePreviewSize(plotTarget);
     this.plot = await createPlot(
-      Object.assign({}, this.options, { disableZoom: true }),
-      preview.createDiv(),
+      Object.assign({}, this.options, { disableZoom: true }, size),
+      plotTarget,
       this.plugin
+    );
+    this.stopObservingSize = observePreviewSize(plotTarget, size, (next) =>
+      this.resizePreview(next)
     );
     preview.createEl("p", {
       text: "Preview - Zoom is disabled while in preview",
-      attr: {
-        style: "margin: 0 3em; font-size: 0.8em; color: var(--text-faint)",
-      },
     });
 
     new Setting(settings).setName("Title").addText((text) => {
@@ -190,6 +207,8 @@ export default class CreatePlotModal extends Modal {
   }
 
   onClose() {
+    this.stopObservingSize?.();
+    this.stopObservingSize = undefined;
     const { contentEl } = this;
     contentEl.empty();
     this.plot = null;

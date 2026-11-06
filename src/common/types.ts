@@ -34,6 +34,9 @@ export interface PlotOptions {
   disableZoom: boolean;
   grid: boolean;
   functions: string[];
+  /** Plot size in pixels; function-plot's default is used when omitted. */
+  width?: number;
+  height?: number;
 }
 
 /**

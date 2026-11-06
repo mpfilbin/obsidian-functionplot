@@ -1,7 +1,8 @@
 import { MarkdownPostProcessorContext, Plugin, Editor } from "obsidian";
 import CreatePlotModal from "./app/CreatePlotModal";
 import SettingsTab from "./app/SettingsTab";
-import { createPlot, parseCodeBlock } from "./common/utils";
+import { createPlot } from "./common/utils";
+import { parseCodeBlock } from "./common/parse";
 import { PlotOptions, PluginSettings } from "./common/types";
 import {
   DEFAULT_PLOT_OPTIONS,
@@ -9,7 +10,7 @@ import {
 } from "./common/defaults";
 
 export default class ObsidianFunctionPlot extends Plugin {
-  settings: PluginSettings;
+  declare settings: PluginSettings;
 
   async onload(): Promise<void> {
     // load settings
