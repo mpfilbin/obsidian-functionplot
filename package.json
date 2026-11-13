@@ -28,7 +28,7 @@
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^10.1.8",
     "prettier": "^3.9.10",
-    "sass": "^1.54.4",
+    "sass": "^1.108.1",
     "sass-loader": "^17.1.0",
     "ts-loader": "^9.3.1",
     "typescript": "^6.0.0",
