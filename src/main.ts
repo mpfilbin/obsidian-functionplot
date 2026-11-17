@@ -55,7 +55,7 @@ export default class ObsidianFunctionPlot extends Plugin {
     return async (
       source: string,
       el: HTMLElement,
-      _ctx: MarkdownPostProcessorContext /* eslint-disable-line no-unused-vars, @typescript-eslint/no-unused-vars */
+      _ctx: MarkdownPostProcessorContext /* eslint-disable-line no-unused-vars */
     ) => {
       const [header, functions] = parseCodeBlock(source);
       const options: PlotOptions = Object.assign(
